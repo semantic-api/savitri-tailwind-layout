@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type MenuSchema, useRouter, useNavbar } from '@savitri/web'
+import { type MenuSchema, useRouter, useNavbar, useStore } from '@savitri/web'
 import { inject, reactive, toRefs, computed, onMounted } from 'vue'
 import { daysAgo } from '@semantic-api/common'
 import { SvInfo, SvIcon, SvPicture } from '@savitri/ui'
@@ -24,10 +24,9 @@ const push = (...args: Parameters<typeof router.push>) => {
 }
 
 onMounted(async () => {
-  /*useStore('user').functions.ping(null, {
+  useStore('user').functions.ping(null, {
     skipLoading: true
   })
-  */
 
   const navbar = await useNavbar({ schema: menuSchema })
   Object.assign(navbarRefs, navbar)
@@ -109,7 +108,7 @@ const logoUrl = new URL('/static/logo.png', import.meta.url).href
           class="
             tw-rounded-full
             tw-overflow-hidden
-            tw-border
+            tw-border-2
             tw-w-16
             tw-h-16
           "
@@ -176,7 +175,7 @@ const logoUrl = new URL('/static/logo.png', import.meta.url).href
         tw-items-center
         tw-gap-6
         tw-bg-white
-        tw-p-6
+        tw-p-8
         tw-z-20
       ">
         <sv-icon
@@ -189,13 +188,21 @@ const logoUrl = new URL('/static/logo.png', import.meta.url).href
         </sv-icon>
 
         <router-view name="topbar"></router-view>
+        <div class="
+          tw-flex
+          tw-items-center
+          tw-ml-auto
+          tw-gap-6
+        ">
+          <slot v-if="$slots.super" name="super"></slot>
+        </div>
       </div>
 
       <div class="
         tw-flex
         tw-flex-col
         tw-gap-[2rem]
-        tw-p-6
+        tw-p-8
       ">
         <router-view></router-view>
       </div>
